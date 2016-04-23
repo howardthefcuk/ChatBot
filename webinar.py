@@ -15,13 +15,13 @@ class webinarAPICalls:
     def webinarRegisterEvent(self, eventId="40149"):
         r = requests.post("https://userapi.webinar.ru/v3/events/"+eventId+"/register", headers={"x-auth-token":self.token}, data ={ "email":self.email})
         regData = json.loads(r.text)
-        self.contactId = regData["contactId"]
+        # self.contactId = regData["contactId"]
         return regData
 
     def webinarRegisterEventSession(self, eventSessionId="42626"):
         r = requests.post("https://userapi.webinar.ru/v3/eventsessions/"+eventSessionId+"/register", headers={"x-auth-token":self.token}, data ={ "email":self.email})
         regData = json.loads(r.text)
-        self.contactId = regData["contactId"]
+        # self.contactId = regData["contactId"]
         return regData
 
 
