@@ -4,12 +4,12 @@ import requests
 
 class webinarAPICalls:
     def __init__(self, email, token):
-        self.email =  email
+        self.email = email
         self.token = token
 
     def webinarSchedule(self):
         r = requests.get("https://userapi.webinar.ru/v3/organization/events/schedule", headers={"x-auth-token":self.token})
-        schedData =  json.loads(r.text.split("]{")[0][1:])
+        schedData = r.json()
         return schedData
 
     def webinarRegisterEvent(self, eventId="40149"):
@@ -25,5 +25,5 @@ class webinarAPICalls:
         return regData
 
 
-w = webinarAPICalls("gg2@wp.ru","1b626d7421537440afcdea38b9e314f0")
-print(w.webinarRegisterEventSession())
+# w = webinarAPICalls("gg2@wp.ru", "1b626d7421537440afcdea38b9e314f0")
+# print(w.webinarRegisterEventSession())
