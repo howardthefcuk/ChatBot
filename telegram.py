@@ -255,6 +255,7 @@ def start_bot(user_data, last_update):
             print("LOGGING: Checking notifications")
             send_notifications(user_data)
             event_notification_counter = 60
+        event_notification_counter -= 1
         updates = bot.get_updates(offset=-20).wait()
         if updates:
             for update in updates:
