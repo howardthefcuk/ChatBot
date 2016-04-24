@@ -171,7 +171,7 @@ def update_events():
 
 
 def greet(uid):
-    bot.send_message(uid, "Привет!")
+    bot.send_message(uid, "Привет! Чтобы узнать, что я могу, набери /help")
 
 
 def get_command(message):
@@ -224,7 +224,6 @@ def start_bot(user_data, last_update):
                         parse_command(uid, user_data, command, command_args)
                     print("DEBUG: ", end="")
                     print(update)
-                    bot.send_message(uid, "Ты - солнышко, лучший человек на свете, тебе всегда будет везти во всем, какой же ты охуенный БОГ ТЫ МОЙ ПРОСТО ОХУИТЕЛЬНЫЙ")
                     with open("last_date.txt", "w") as w:
                         w.write(str(last_update))
                     with open("users.json", "w") as f:
