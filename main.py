@@ -2,7 +2,6 @@ import telegram
 import json
 
 
-
 TELEGRAM_TOKEN = "211900707:AAEHh24_XSCDFWIBonvEMW073H51yKjafFE"
 
 
