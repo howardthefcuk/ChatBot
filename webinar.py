@@ -10,6 +10,7 @@ class webinarAPICalls:
     def webinarSchedule(self):
         r = requests.get("https://userapi.webinar.ru/v3/organization/events/schedule", headers={"x-auth-token":self.token})
         schedData = r.json()
+        # print("DEBUG: " + r.text)
         return schedData
 
     def webinarRegisterEvent(self, eventId="40149"):

@@ -33,7 +33,7 @@ def joinevent(uid, userdata, args):
             bot.send_message(uid, "Извините, вы не зарегистрированы в системе.\n"
                 "Для регистрации в системе напишите: /register ваш_email")
     elif args is None:
-        bot.send_message(uid, "Для записи на событие используйте команду /join номер_события")
+        bot.send_message(uid, "Для записи на событие используйте команду /joinevent номер_события")
     else:
         w = webinar.webinarAPICalls(userdata[uid]['email'], webinar_token)
         regdata = w.webinarRegisterEvent(args[0])
@@ -52,7 +52,7 @@ def joinsession(uid, userdata, args):
             bot.send_message(uid, "Извините, вы не зарегистрированы в системе.\n"
                 "Для регистрации в системе напишите: /register ваш_email")
     elif args is None:
-        bot.send_message("Для записи на событие используйте команду /join номер_события")
+        bot.send_message("Для записи на событие используйте команду /joinsession номер_события")
     else:
         w = webinar.webinarAPICalls(userdata[uid]['email'], webinar_token)
         regdata = w.webinarRegisterEventSession(args[0])
@@ -82,6 +82,7 @@ def schedule(uid, userdata, args):
     else:
         w = webinar.webinarAPICalls(userdata[uid]['email'], webinar_token)
         timetable = w.webinarSchedule()
+        print("DEBUG: " + str(timetable))
         message = list()
         for event in timetable:
             if event['status'] is not 'STOP':
