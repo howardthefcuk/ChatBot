@@ -20,11 +20,11 @@ def parse_time(timestr):
 
 def return_help(uid, userdata, args):
     help_text = """Привет! Я бот компании CompanyName на webinar.ru! Я расскажу тебе о наших вебинарах и помогу зарегистрироваться на интересующие тебя вебинары, а заодно и заранее напомню о времени, чтобы ты ничего не забыл. Чтобы воспользоваться моей помощью, введи команду из списка:
-                /register почтовый_ящик: зарегистрироваться в системе
-                /schedule: получить расписание вебинаров
-                /joinevent номер_вебинара: зарегистрироваться на вебинар
-                /joinsession номер_сессии: зарегистрироваться на конкретную сессию вебинара
-                /help: помощь"""
+/register почтовый_ящик: зарегистрироваться в системе
+/schedule: получить расписание вебинаров
+/joinevent номер_вебинара: зарегистрироваться на вебинар
+/oinsession номер_сессии: зарегистрироваться на конкретную сессию вебинара
+/help: помощь"""
     bot.send_message(uid, help_text)
 
 
@@ -188,6 +188,8 @@ def get_command(message):
 def parse_command(uid, userdata, command, args):
     if command in COMMANDS:
         COMMANDS[command](uid, userdata, args)
+    else:
+        bot.send_message(uid, "Такой команды у нас пока нет.")
 
 
 def start_bot(user_data, last_update):
