@@ -41,6 +41,21 @@ def joinevent(uid, userdata, args):
         if 'link' in regdata:
             bot.send_message(uid, "Поздравляем, вы записались на вебинар!\n"
                                   "Ваша персональная ссылка: {}".format(regdata['link']))
+            global event_data
+            event_data = update_events()
+            event = None
+            for e in event_data:
+                if e['id'] == args[0]:
+                    event = e
+                    break
+            if event is not None:
+                event['day'] = False
+                event['hour'] = False
+                if 'events' in userdata[uid]:
+                    userdata[uid]['events'].append(event)
+                else:
+                    userdata[uid]['events'] = list()
+                    userdata[uid]['events'].append(event)
         elif 'error' in regdata and regdata['error']['code'] == 409:
             bot.send_message(uid, "Вы уже записаны на этот вебинар.")
         else:
@@ -60,6 +75,21 @@ def joinsession(uid, userdata, args):
         if 'link' in regdata:
             bot.send_message(uid, "Поздравляем, вы записались на сессию вебинара!\n"
                                   "Ваша персональная ссылка: {}".format(regdata['link']))
+            global event_data
+            event_data = update_events()
+            event = None
+            for e in event_data:
+                if e['id'] == args[0]:
+                    event = e
+                    break
+            if event is not None:
+                event['day'] = False
+                event['hour'] = False
+                if 'events' in userdata[uid]:
+                    userdata[uid]['events'].append(event)
+                else:
+                    userdata[uid]['events'] = list()
+                    userdata[uid]['events'].append(event)
         elif 'error' in regdata and regdata['error']['code'] == 409:
             bot.send_message(uid, "Вы уже записаны на эту сессию.")
         else:
@@ -193,8 +223,25 @@ def parse_command(uid, userdata, command, args):
         bot.send_message(uid, "Такой команды у нас пока нет.")
 
 
+def send_notifications(user_data):
+    for user in user_data:
+        if 'events' in user_data[user]:
+            for event in user_data[user]['events']:
+                if event['starts_at'] - datetime.datetime.now().timestamp() < 86400 and event['day'] is False:
+                    event['day'] = True
+                    notification = 'Привет! Не забудь, меньше, чем через 24 часа, начинается событие "{}".'.format(event['name'])
+                    print("LOGGING: Sending notification: " + notification)
+                    bot.send_message(user, notification)
+                if event['starts_at'] - datetime.datetime.now().timestamp() < 3600 and event['hour'] is False:
+                    event['hour'] = True
+                    notification = 'Привет! Не забудь, меньше, чем через час, начинается событие "{}".'.format(event['name'])
+                    print("LOGGING: Sending notification: " + notification)
+                    bot.send_message(user, notification)
+
+
 def start_bot(user_data, last_update):
     event_update_counter = 0
+    event_notification_counter = 0
     while True:
         if event_update_counter == 0:
             print("LOGGING: updating events")
@@ -202,8 +249,12 @@ def start_bot(user_data, last_update):
             print("DEBUG: {}".format(events))
             with open("event_data.json", "w", encoding="utf-8") as f:
                 json.dump(events, f)
-            event_update_counter = 100000
+            event_update_counter = 100
         event_update_counter -= 1
+        if event_notification_counter == 0:
+            print("LOGGING: Checking notifications")
+            send_notifications(user_data)
+            event_notification_counter = 60
         updates = bot.get_updates(offset=-20).wait()
         if updates:
             for update in updates:
