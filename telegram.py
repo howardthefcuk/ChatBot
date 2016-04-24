@@ -222,6 +222,8 @@ def start_bot(user_data, last_update):
                     if command:
                         print("LOGGING: parsing command {} from {}".format(command, uid))
                         parse_command(uid, user_data, command, command_args)
+                    else:
+                        bot.send_message(uid, "Если не знаешь, чем еще я могу помочь, набери /help")
                     print("DEBUG: ", end="")
                     print(update)
                     with open("last_date.txt", "w") as w:
