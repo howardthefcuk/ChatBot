@@ -204,6 +204,7 @@ def start_bot(user_data, last_update):
         updates = bot.get_updates(offset=-20).wait()
         if updates:
             for update in updates:
+                greeted = False
                 if update.update_id > last_update:
                     last_update = update.update_id
                     uid = str(update.message.sender.id)
@@ -212,9 +213,11 @@ def start_bot(user_data, last_update):
                         if "last_session" in user_data[uid]:
                             if time.time() - user_data[uid]["last_session"] > 10800:
                                 greet(uid)
+                                greeted = True
                     else:
                         user_data[str(uid)] = dict()
                         greet(uid)
+                        greeted = True
                     user_data[uid]["last_session"] = update.message.date
                     message_text = update.message.text
                     print("LOGGING: received a message: {}".format(message_text))
@@ -223,7 +226,8 @@ def start_bot(user_data, last_update):
                         print("LOGGING: parsing command {} from {}".format(command, uid))
                         parse_command(uid, user_data, command, command_args)
                     else:
-                        bot.send_message(uid, "Если не знаешь, чем еще я могу помочь, набери /help")
+                        if not greeted:
+                            bot.send_message(uid, "Если не знаешь, чем еще я могу помочь, набери /help")
                     print("DEBUG: ", end="")
                     print(update)
                     with open("last_date.txt", "w") as w:
